@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    h1= title
+    p Welcome to #{title}
+
+    button(onclick="move()") Import
+    script.
+        function move() {
+            window.location.href = '/consume'
+        }
