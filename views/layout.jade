@@ -1,15 +1,23 @@
 doctype html
-html
-  head
-    title= title
-    script(src="/scripts/jquery/dist/jquery.js")
-    script(src="/scripts/bootstrap/dist/js/bootstrap.js")
-    script(src="/scripts/d3/build/d3.js")
-    script(src="/javascripts/dropzone.js")
+html(ng-app="deloreanweb")
+    head
+        title= title
+        script(src="/app/node_modules/jquery/dist/jquery.js")
+        script(src="/app/node_modules/bootstrap/dist/js/bootstrap.js")
+        script(src="/app/node_modules/angular/angular.js")
+        script(src="/app/node_modules/angular-ui-router/release/angular-ui-router.js")
+        script(src="/app/app.js")
+        script(src="/app/views/home/home.js")
+        script(src="/app/views/connection/connection.js")
+        script(src="/app/services/api.js")
+        script(src="/app/configuration/constants.js")
+        script(src="/app/directives/directives.js")
+        script(src="/javascripts/dropzone.js")
 
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='/scripts/bootstrap/dist/css/bootstrap.css')
-    link(rel="stylesheet", href="/scripts/bootstrap/css/simple-sidebar.css")
+        link(rel='stylesheet', href='/app/node_modules/bootstrap/dist/css/bootstrap.css')
+        link(rel='stylesheet', href='/app/stylesheets/simple-sidebar.css')
+        link(rel='stylesheet', href='/app/stylesheets/dropzone.css')
 
-  body
-    block content
+    body
+        base(href="/")
+        div(ui-view)
