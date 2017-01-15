@@ -9,7 +9,8 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -30,15 +31,29 @@
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
-            <li class="sidebar-brand">
-                    <a href="#" data-toggle="modal" data-target="#importModal">
-                        Import
-                    </a>
-                    <a href="#menu-toggle" class="closeSideBarLink" id="menu-toggle">
-                        <span class="glyphicon glyphicon-menu-left"/>
-                   </a>
+            <li class="sidebar-brand sideBarTopButtons">
+                <a href="#" data-toggle="modal" data-target="#importModal">
+                    Import
+                </a>
+                <a href="#menu-toggle" class="closeSideBarLink" id="menu-toggle">
+                    <span class="glyphicon glyphicon-menu-left"/>
+                </a>
             </li>
-            <li ng-repeat="row in data "> {{ row.carrier }} </li>
+            <li class="sidebar-brand">
+                <a href="#" ng-click="hideViz('#histoDiv')">Histogramme</a>
+            </li>
+            <li class="sidebar-brand">
+                <a href="#" ng-click="hideViz('#cabinDiv')">Cabin</a>
+            </li>
+            <li class="sidebar-brand">
+                <a href="#" ng-click="hideViz('#DateTime-chart-container')">Flight date</a>
+            </li>
+            <li class="sidebar-brand">
+                <a href="#" ng-click="hideViz('#posDiv')">PoS</a>
+            </li>
+            <li class="sidebar-brand">
+                <a href="#" ng-click="hideViz('#dc-table-graph')">Table</a>
+            </li>
         </ul>
     </div>
 
@@ -47,9 +62,302 @@
     <!-- Page Content -->
     <div id="page-content-wrapper">
         <div class="container-fluid">
+            <div id="vizBody">
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="chart-wrapper">
+                                <div class="chart-title">
+                                    boking curve
+                                </div>
+                                <div class="chart-stage">
+                                    <div id="Curve-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- booking histogram -->
+                        <div class="col-sm-12">
+                            <div id='histoDiv' class="chart-wrapper">
+                                <div class="chart-title">
+                                    booking histogram
+                                </div>
+                                <div class="chart-stage" id="Histo-chart-container">
+                                    <div id="Histo-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- booking histogram -->
+                        <!-- cabin -->
+                        <div class="col-sm-6">
+                            <div id="cabinDiv" class="chart-wrapper">
+                                <div class="chart-title">
+                                    Cabin
+                                </div>
+                                <div class="chart-stage">
+                                    <div id="Cabin-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- cabin -->
+                        <!-- subclass -->
+                        <div class="col-sm-6">
+                            <div class="chart-wrapper">
+                                <div class="chart-title">
+                                    Subclass
+                                </div>
+                                <div class="chart-stage">
+                                    <div id="Subclass-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- subclass -->
+                        <div class="col-sm-12">
+                            <!-- DateTime -->
+                            <div class="chart-wrapper" id="DateTime-chart-container">
+                                <div class="chart-title">
+                                    Date
+                                </div>
+                                <div class="chart-stage">
+                                    <div id="DateTime-chart"></div>
+                                </div>
+                            </div>
+                            <!-- DateTime -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="row">
+                        <!-- PoS list -->
+                        <div class="col-sm-12">
+                            <div id="posDiv" class="chart-wrapper">
+                                <div class="chart-title">
+                                    PoS
+                                </div>
+                                <div class="chart-stage">
+                                    <div id="PoS-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- PoS list -->
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <table class='table table-responsive' id='dc-table-graph'>
+        </table>
+
     </div>
-    <!-- /#page-content-wrapper -->
+    <script>
+
+        if (!angular.element($("#importModal")).scope.data) {
+            $('#importModal').modal('show');
+            $('#vizBody').hide()
+            $('#table').hide()
+        }
+        // load data from a csv file
+        function renderViz(scopeData) {
+            console.log("renderViz")
+            data = scopeData;
+//                        console.log(data);
+            var dateFormat = d3.time.format("%Y-%m-%dT%H:%M:%S.%LZ");
+
+            // clean data
+
+            data.forEach(function (d) {
+//                        .substr(0,9)
+                d.Snapshot = dateFormat.parse(d['snapshot_date']);
+                d.Snapshot.setMinutes(0);
+                d.Snapshot.setSeconds(0);
+                d.FlightDate = dateFormat.parse(d['flight_date']);
+                d.FlightDate.setMinutes(0);
+                d.FlightDate.setSeconds(0);
+                d.PosCode = d['pos_code'];
+                d.TrueO = d['origin'];
+                d.TrueD = d['destination'];
+                d.PaxY = +d['pax_Y'];
+            });
+            dc.disableTransitions = true;
+            // Run the data through crossfilter
+
+            var indexedData = crossfilter(data);
+
+            // Create dimensions
+
+            var PaxDim = indexedData.dimension(function (d) {
+                return d.PaxY;
+            });
+            var SnapshotDim = indexedData.dimension(function (d) {
+                return d.Snapshot;
+            });
+            var CarriertDim = indexedData.dimension(function (d) {
+                return d.carrier;
+            });
+            var FlightDim = indexedData.dimension(function (d) {
+                return d.flight;
+            });
+            var FlightDateDim = indexedData.dimension(function (d) {
+                return d.FlightDate;
+            });
+            var CabinDim = indexedData.dimension(function (d) {
+                return d.cabin;
+            });
+            var SubclassDim = indexedData.dimension(function (d) {
+                return d.subclass;
+            });
+            var PosDim = indexedData.dimension(function (d) {
+                return d.PosCode;
+            });
+            var OrigDim = indexedData.dimension(function (d) {
+                return d.TrueO;
+            });
+            var DestDim = indexedData.dimension(function (d) {
+                return d.TrueD;
+            });
+            var allDim = indexedData.dimension(function (d) {
+                return d;
+            });
+            // define some group
+
+            var PaxGroup = PaxDim.group();
+            var SnapshotGroup = SnapshotDim.group();
+            var CarriertGroup = CarriertDim.group();
+            var FlightGroup = FlightDim.group();
+            var FlightDateGroup = FlightDateDim.group();
+            var CabinGroup = CabinDim.group();
+            var SubclassGroup = SubclassDim.group();
+            var PosGroup = PosDim.group();
+            var OrigGroup = OrigDim.group();
+            var DestGroup = DestDim.group();
+
+
+            var minDate = dateFormat.parse(FlightDateDim.bottom(1)[0]['flight_date']);
+            var maxDate = dateFormat.parse(FlightDateDim.top(1)[0]['flight_date']);
+            console.log(minDate)
+            console.log(maxDate)
+            var minDateSnap = SnapshotDim.bottom(1)[0]["timestamp"];
+            var maxDateSnap = SnapshotDim.top(1)[0]["timestamp"];
+
+
+            // Create the dc.js chart objects & link to div
+
+            var dataTable = dc.dataTable("#dc-table-graph");
+            var CabinChart = dc.pieChart("#Cabin-chart");
+            var PoSChart = dc.rowChart("#PoS-chart");
+            var HistoChart = dc.barChart("#Histo-chart");
+            var timeChart = dc.barChart("#DateTime-chart");
+            // Setup the charts
+
+
+            HistoChart
+                    .dimension(PaxDim)
+                    .group(FlightGroup)
+                    .x(d3.scale.ordinal().domain(FlightDim))
+                    .xUnits(dc.units.ordinal)
+                    .brushOn(false);
+            console.log(d3.scale.ordinal().rangeRoundBands([0, 20], .05));
+
+            timeChart.width(650)
+                    .height(140)
+                    .dimension(FlightDateDim)
+                    .group(FlightDateGroup)
+                    .x(d3.time.scale().domain([minDate, maxDate]))
+                    .yAxisLabel("Frequency").xAxisLabel('Time');
+
+            //PoS
+            PoSChart.height(1510)
+                    .dimension(PosDim.top(30))
+                    .group(PosGroup)
+                    .ordering(function (d) {
+                        return -d.value
+                    })
+                    .colors(['blue'])
+
+            //cabin
+            var xAxis = PoSChart.elasticX(true);
+
+            CabinChart
+                    .dimension(CabinDim)
+                    .group(CabinGroup)
+
+            // Table
+            dataTable
+                    .dimension(PaxDim)
+                    .group(function (d) {
+                        return ""
+                    })
+                    .size(60)
+                    .columns([
+                        {
+                            label: "Snapshot date",
+                            format: function (d) {
+                                return d.Snapshot;
+                            }
+                        },
+                        {
+                            label: "Snapshot date",
+                            format: function (d) {
+                                return d.Carrier;
+                            }
+                        },
+                        {
+                            label: "Snapshot date",
+                            format: function (d) {
+                                return d.Flight;
+                            }
+                        },
+                        {
+                            label: "Snapshot date",
+                            format: function (d) {
+                                return d.FlightDate;
+                            }
+                        },
+                        {
+                            label: "Snapshot date",
+                            format: function (d) {
+                                return d.Cabin;
+                            }
+                        },
+                        {
+                            label: "Snapshot date",
+                            format: function (d) {
+                                return d.Subclass;
+                            }
+                        },
+                        {
+                            label: "Snapshot date",
+                            format: function (d) {
+                                return d.PosCode;
+                            }
+                        },
+                        {
+                            label: "Snapshot date",
+                            format: function (d) {
+                                return d.TrueO;
+                            }
+                        },
+                        {
+                            label: "Snapshot date",
+                            format: function (d) {
+                                return d.TrueD;
+                            }
+                        }
+                    ])
+                    .sortBy(function (d) {
+                        return d.Cabin;
+                    })
+                    .order(d3.ascending);
+
+            // Render the Charts
+            dc.renderAll();
+        }
+
+    </script>
+</div>
+</div>
+<!-- /#page-content-wrapper -->
 
 </div>
 
@@ -58,7 +366,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">File import</h4>
             </div>
             <div class="modal-body">
@@ -70,7 +379,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
-                <button type="button" class="btn btn-primary" ng-click="getAllData()">Validate</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="getAllData()">Validate
+                </button>
             </div>
         </div>
     </div>
