@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+
+    <title>Delorean</title>
+
+    <script src='../../../javascripts/d3.js' type='text/javascript'></script>
+    <script src='../../../javascripts/crossfilter.js' type='text/javascript'></script>
+    <script src='../../../javascripts/dc.js' type='text/javascript'></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+<div class = 'container-fluid'>
+    <div class="navbar-header">
+
+        <a class="navbar-brand" href="./">DeloreanWeb an Interactive datavisualisation tool </a>
+
+    </div>
+</div>
+
+<div class = 'container-fluid'>
+
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            boking curve
+                        </div>
+                        <div class="chart-stage">
+                            <div id="Curve-chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- booking histogram -->
+                <div class="col-sm-12">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            booking histogram
+                        </div>
+                        <div class="chart-stage">
+                            <div id="Histo-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- booking histogram -->
+            <!-- cabin -->
+            <div class="col-sm-3">
+                <div class="chart-wrapper">
+                    <div class="chart-title">
+                        Cabin
+                    </div>
+                    <div class="chart-stage">
+                        <div id="Cabin-chart"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- cabin -->
+            <div class="col-sm-9">
+                <!-- DateTime -->
+                <div class="chart-wrapper">
+                    <div class="chart-title">
+                        Date Time
+                    </div>
+                    <div class="chart-stage">
+                        <div id="DateTime-chart"></div>
+                    </div>
+                </div>
+                <!-- DateTime -->
+            </div>
+        </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="row">
+                <!-- PoS list -->
+                <div class="col-sm-12">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            PoS
+                        </div>
+                        <div class="chart-stage">
+                            <div id="PoS-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- PoS list -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class='table table-responsive' id='dc-table-graph'>
+</table>
+
+
+<script>
+
+    var dataCSV;
+    // load data from a csv file
+    d3.tsv("../../../../data/deloreanData.tsv", function(data){
+        dataCSV=data;
+
+        var dateFormat = d3.time.format("%Y-%m-%d");
+
+        // clean data
+
+        data.forEach(function(d) {
+            d.Snapshot = dateFormat.parse(d['Snapshot date']);
+            d.FlightDate = dateFormat.parse(d['Flight date']);
+            d.PosCode = d['PoS Code'];
+            d.TrueO = d['True Origin'];
+            d.TrueD = d['True Destination'];
+            d.PaxY = d['Pax Y'];
+        });
+
+        // Run the data through crossfilter
+
+        var indexedData = crossfilter(data);
+
+        // Create dimensions
+
+        var PaxDim = indexedData.dimension(function (d) {return d.PaxY;});
+        var SnapshotDim = indexedData.dimension(function (d) {return d.Snapshot;});
+        var CarriertDim = indexedData.dimension(function (d) {return d.Carrier;});
+        var FlightDim = indexedData.dimension(function (d) {return d.Flight;});
+        var FlightDateDim = indexedData.dimension(function (d) {return d.FlightDate;});
+        var CabinDim = indexedData.dimension(function (d) {return d.Cabin;});
+        var SubclassDim = indexedData.dimension(function (d) {return d.Subclass;});
+        var PosDim = indexedData.dimension(function (d) {return d.PosCode;});
+        var OrigDim = indexedData.dimension(function (d) {return d.TrueO;});
+        var DestDim = indexedData.dimension(function (d) {return d.TrueD;});
+
+        // define some group
+
+        var PaxGroup = PaxDim.group();
+        var SnapshotGroup = SnapshotDim.group();
+        var CarriertGroup = CarriertDim.group();
+        var FlightGroup = FlightDim.group();
+        var FlightDateGroup = FlightDateDim.group();
+        var CabinGroup = CabinDim.group();
+        var SubclassGroup = SubclassDim.group();
+        var PosGroup = PosDim.group();
+        var OrigGroup = OrigDim.group();
+        var DestGroup = DestDim.group();
+
+
+        var minDate = FlightDateDim.bottom(1)[0]['Flight date'];
+        var maxDate = FlightDateDim.top(1)[0]['Flight date'];
+        console.log(minDate)
+        var minDateSnap = SnapshotDim.bottom(1)[0]["timestamp"];
+        var maxDateSnap = SnapshotDim.top(1)[0]["timestamp"];
+
+
+
+
+        // Create the dc.js chart objects & link to div
+
+        var dataTable = dc.dataTable("#dc-table-graph");
+        var CabinChart = dc.pieChart("#Cabin-chart");
+        var PoSChart = dc.rowChart("#PoS-chart");
+        var HistoChart = dc.barChart("#Histo-chart");
+        //var timeChart = dc.barChart("#DateTime-chart");
+        // Setup the charts
+
+
+
+
+      HistoChart
+            .width(768)
+            .height(480)
+            .brushOn(false)
+            .x(d3.scale.ordinal())
+            .dimension(PaxDim)
+            .group(FlightGroup);
+
+        /*timeChart
+            .dimension(FlightDateDim)
+            .group(FlightDateGroup)
+            .transitionDuration(500)
+            .x(d3.time.scale().domain([minDate, maxDate]))
+            .elasticY(true)
+            .yAxis().ticks(4);
+*/
+        //PoS
+        PoSChart
+            .dimension(PosDim)
+            .group(PosGroup)
+            .ordering(function(d) { return -d.value })
+            //.colors(['#79bdd6'])
+            .elasticX(true)
+            .labelOffsetY(10)
+            .xAxis().ticks(4);
+        //cabin
+
+        CabinChart
+            .dimension(CabinDim)
+            .group(CabinGroup)
+
+        // Table
+        dataTable
+            .dimension(PaxDim)
+            .group(function(d) { return ""
+            })
+            .size(20)
+            .columns([
+                {
+                    label: "Snapshot date",
+                    format: function(d) { return d.Snapshot; }
+                },
+                {
+                    label: "Snapshot date",
+                    format:function(d) { return d.Carrier; }
+                },
+                {
+                    label: "Snapshot date",
+                    format:function(d) { return d.Flight; }
+                },
+                {
+                    label: "Snapshot date",
+                    format:function(d) { return d.FlightDate; }
+                },
+                {
+                    label: "Snapshot date",
+                    format:function(d) { return d.Cabin; }
+                },
+                {
+                    label: "Snapshot date",
+                    format:function(d) { return d.Subclass; }
+                },
+                {
+                    label: "Snapshot date",
+                    format:function(d) { return d.PosCode; }
+                },
+                {
+                    label: "Snapshot date",
+                    format:function(d) { return d.TrueO; }
+                },
+                {
+                    label: "Snapshot date",
+                    format:function(d) { return d.TrueD; }
+                }
+            ])
+            .sortBy(function(d){ return d.Cabin; })
+            .order(d3.ascending);
+
+        // Render the Charts
+        dc.renderAll();
+    });
+
+</script>
+
+</body>
+</html>

@@ -2,7 +2,7 @@
  * Created by sbunlon on 12/12/2016.
  */
 
-angular.module('deloreanweb', ['deloreanweb.services', 'ui.router', 'deloreanweb.constants', 'deloreanweb.home', 'deloreanweb.connection', 'deloreanweb.directives'])
+angular.module('deloreanweb', ['deloreanweb.services', 'ui.router', 'deloreanweb.constants', 'deloreanweb.home', 'deloreanweb.table', 'deloreanweb.connection', 'deloreanweb.directives'])
 
     .config(function ($stateProvider, $locationProvider) {
 
