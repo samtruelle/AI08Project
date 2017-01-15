@@ -12,6 +12,19 @@ angular.module('deloreanweb.home', [])
             });
     })
 
-    .controller('homeCtrl', function($scope, apiUrl){
+    .controller('homeCtrl', [ 'flightDateService', '$scope', function(flightDateService, $scope){
        var myDropzone = new Dropzone("#importDropzone", { url: "/home/import"});
-    });
+        $scope.orig = angular.copy($scope.data);
+
+        flightDateService.().then(function($dataObject){
+            $scope.products = JSON.parse($dataObject.data);
+        }, function($dataObject){
+            console.log("no products");
+        });
+        $scope.filterFlightDate = function(date){
+            $scope.flightDate = date;
+
+            //filterPreviousFlightDate
+            };
+
+    }]);

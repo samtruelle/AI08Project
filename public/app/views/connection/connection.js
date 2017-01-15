@@ -26,7 +26,6 @@ angular.module('deloreanweb.connection', [])
     };
 
     $scope.login = function() {
-        console.log('test')
         $state.go('app.home');
     };
 

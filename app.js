@@ -77,6 +77,6 @@ app.use(function(err, req, res, next) {
 });
 
 //db configuration, uncomment and fill correctly to connect to mongo DB
-//mongoose.connect('mongodb://127.0.0.1:27017/enigmator');
+mongoose.connect('mongodb://127.0.0.1:27017/test');
 
 module.exports = app;
