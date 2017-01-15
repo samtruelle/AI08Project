@@ -7,3 +7,11 @@ angular.module('deloreanweb.services', ["deloreanweb.constants"])
         }
     }
 }])
+.factory('flightDateService', ['$http', 'apiUrl', function ($http, apiUrl) {
+    return {
+        filterPreviousFlightDate: function (date) {
+            return $http.post(apiUrl.getApiUrl() + "/flightDate/Before",{date: date});
+        }
+    }
+
+}]);
