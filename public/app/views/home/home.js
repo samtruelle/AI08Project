@@ -15,10 +15,19 @@ angular.module('deloreanweb.home', [])
     .controller('homeCtrl', ['flightDateService', 'generalService', 'loginService', 'authenticationService', '$scope', function (flightDateService, generalService, loginService, authenticationService, $scope) {
         var myDropzone = new Dropzone("#importDropzone", {url: "/home/import"});
 
+        //$scope.$on('$viewContentLoaded', function readyToTrick() {
+        //    if(!$scope.data) {
+        //
+        //    }
+        //});
+
         $scope.getAllData = function () {
             generalService.getAllData().then(function($dataObject){
                 $scope.data = JSON.parse($dataObject.data);
-                console.log($scope.data)
+                myDropzone.removeAllFiles();
+                $('#vizBody').show()
+                $('#table').show()
+                renderViz($scope.data);
             }, function(){
                 console.log("no products");
             });

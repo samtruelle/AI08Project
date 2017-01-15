@@ -107,14 +107,14 @@ router.post('/home/import', upload.single('file'), function (req, res, next) {
 
                 var elements = result.data;
 
-                for (var i = 0; i < elements.length; i++) {
-                    var newFlightDate = elements[i].flight_date.split('-');
-                    var newSnapDate = elements[i].snapshot_date.split('-');
-                    elements[i].flight_date = new Date(newFlightDate[0], newFlightDate[1], newFlightDate[2]);
-                    elements[i].snapshot_date = new Date(newSnapDate[0], newSnapDate[1], newSnapDate[2]);
-                    elements[i].cabin = Number(elements[i].cabin);
-                    elements[i].pax_Y = Number(elements[i].pax_Y);
-                }
+                //for (var i = 0; i < elements.length; i++) {
+                //    var newFlightDate = elements[i].flight_date.split('-');
+                //    var newSnapDate = elements[i].snapshot_date.split('-');
+                //    elements[i].flight_date = new Date(newFlightDate[0], newFlightDate[1], newFlightDate[2]);
+                //    elements[i].snapshot_date = new Date(newSnapDate[0], newSnapDate[1], newSnapDate[2]);
+                //    elements[i].cabin = Number(elements[i].cabin);
+                //    elements[i].pax_Y = Number(elements[i].pax_Y);
+                //}
 
                 file.collection.insert(elements, function (err, docs) {
                     if (err) {
