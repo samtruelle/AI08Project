@@ -8,7 +8,7 @@ a {
 }
 
 #sidebar-wrapper {
-    background-color: rgb(91, 82, 174);
+    background-color: #445f7a;
     color: white;
 }
 
@@ -34,12 +34,13 @@ a {
     display: inline !important;
 }
 
+.sideBarTopButtons {
+    background-color: #445f7a;
+}
+
 body.application {
-
     background: #f2f2f2;
-
     padding: 60px 20px 0;
-
 }
 
 body.application > .container-fluid {

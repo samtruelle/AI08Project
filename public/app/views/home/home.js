@@ -12,7 +12,7 @@ angular.module('deloreanweb.home', [])
             });
     })
 
-    .controller('homeCtrl', ['flightDateService', 'generalService', 'loginService', 'authenticationService', '$scope', function (flightDateService, generalService, loginService, authenticationService, $scope) {
+    .controller('homeCtrl', ['flightDateService', 'generalService', 'loginService', 'authenticationService', '$scope', '$state', function (flightDateService, generalService, loginService, authenticationService, $scope, $state) {
         var myDropzone = new Dropzone("#importDropzone", {url: "/home/import"});
 
         //$scope.$on('$viewContentLoaded', function readyToTrick() {
@@ -35,6 +35,17 @@ angular.module('deloreanweb.home', [])
 
         $scope.logout = function () {
             loginService.logout();
+        };
+
+        $scope.hideViz = function(id){
+            console.log('test')
+            console.log(id)
+            var element = $(id);
+            if(element.is(":visible"))
+                element.hide();
+            else
+                element.show();
+            //$state.reload();
         };
         //$scope.orig = angular.copy($scope.data);
 
