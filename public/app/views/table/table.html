@@ -1,18 +1,3 @@
-<!DOCTYPE html>
-<html lang='en'>
-<head>
-    <meta charset='utf-8'>
-
-    <title>Delorean</title>
-
-    <script src='../../../javascripts/d3.js' type='text/javascript'></script>
-    <script src='../../../javascripts/crossfilter.js' type='text/javascript'></script>
-    <script src='../../../javascripts/dc.js' type='text/javascript'></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-</head>
-
-<body>
 <div class = 'container-fluid'>
     <div class="navbar-header">
 
@@ -51,7 +36,7 @@
                 </div>
                 <!-- booking histogram -->
             <!-- cabin -->
-            <div class="col-sm-3">
+            <div class="col-sm-6">
                 <div class="chart-wrapper">
                     <div class="chart-title">
                         Cabin
@@ -76,7 +61,7 @@
             </div>
         </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-12">
             <div class="row">
                 <!-- PoS list -->
                 <div class="col-sm-12">
@@ -112,13 +97,17 @@
 
         data.forEach(function(d) {
             d.Snapshot = dateFormat.parse(d['Snapshot date']);
+            d.Snapshot.setMinutes(0);
+            d.Snapshot.setSeconds(0);
             d.FlightDate = dateFormat.parse(d['Flight date']);
+            d.FlightDate.setMinutes(0);
+            d.FlightDate.setSeconds(0);
             d.PosCode = d['PoS Code'];
             d.TrueO = d['True Origin'];
             d.TrueD = d['True Destination'];
-            d.PaxY = d['Pax Y'];
+            d.PaxY = +d['Pax Y'];
         });
-
+        dc.disableTransitions=true;
         // Run the data through crossfilter
 
         var indexedData = crossfilter(data);
@@ -135,7 +124,7 @@
         var PosDim = indexedData.dimension(function (d) {return d.PosCode;});
         var OrigDim = indexedData.dimension(function (d) {return d.TrueO;});
         var DestDim = indexedData.dimension(function (d) {return d.TrueD;});
-
+        var allDim = indexedData.dimension(function(d) {return d;});
         // define some group
 
         var PaxGroup = PaxDim.group();
@@ -150,9 +139,11 @@
         var DestGroup = DestDim.group();
 
 
-        var minDate = FlightDateDim.bottom(1)[0]['Flight date'];
-        var maxDate = FlightDateDim.top(1)[0]['Flight date'];
+
+        var minDate = dateFormat.parse(FlightDateDim.bottom(1)[0]['Flight date']);
+        var maxDate = dateFormat.parse(FlightDateDim.top(1)[0]['Flight date']);
         console.log(minDate)
+        console.log(maxDate)
         var minDateSnap = SnapshotDim.bottom(1)[0]["timestamp"];
         var maxDateSnap = SnapshotDim.top(1)[0]["timestamp"];
 
@@ -165,38 +156,36 @@
         var CabinChart = dc.pieChart("#Cabin-chart");
         var PoSChart = dc.rowChart("#PoS-chart");
         var HistoChart = dc.barChart("#Histo-chart");
-        //var timeChart = dc.barChart("#DateTime-chart");
+        var timeChart = dc.barChart("#DateTime-chart");
         // Setup the charts
 
 
 
 
       HistoChart
-            .width(768)
-            .height(480)
-            .brushOn(false)
-            .x(d3.scale.ordinal())
             .dimension(PaxDim)
-            .group(FlightGroup);
+            .group(FlightGroup)
+        .x(d3.scale.ordinal().domain(FlightDim))
+          .xUnits(dc.units.ordinal)
+        .brushOn(false);
+        console.log(d3.scale.ordinal().rangeRoundBands([0, 20], .05));
 
-        /*timeChart
+        timeChart.width(650)
+            .height(140)
             .dimension(FlightDateDim)
             .group(FlightDateGroup)
-            .transitionDuration(500)
             .x(d3.time.scale().domain([minDate, maxDate]))
-            .elasticY(true)
-            .yAxis().ticks(4);
-*/
+            .yAxisLabel("Frequency").xAxisLabel('Time');
+
         //PoS
-        PoSChart
-            .dimension(PosDim)
+        PoSChart.height(1510)
+            .dimension(PosDim.top(30))
             .group(PosGroup)
             .ordering(function(d) { return -d.value })
-            //.colors(['#79bdd6'])
-            .elasticX(true)
-            .labelOffsetY(10)
-            .xAxis().ticks(4);
+            .colors(['blue'])
+
         //cabin
+        var xAxis = PoSChart.elasticX(true);
 
         CabinChart
             .dimension(CabinDim)
@@ -207,7 +196,7 @@
             .dimension(PaxDim)
             .group(function(d) { return ""
             })
-            .size(20)
+            .size(60)
             .columns([
                 {
                     label: "Snapshot date",
