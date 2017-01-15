@@ -9,7 +9,7 @@
 <div class = 'container-fluid'>
 
     <div class="row">
-        <div class="col-sm-10">
+        <div class="col-sm-9">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="chart-wrapper">
@@ -29,7 +29,7 @@
                         <div class="chart-title">
                             booking histogram
                         </div>
-                        <div class="chart-stage">
+                        <div class="chart-stage" id="Histo-chart-container">
                             <div id="Histo-chart"></div>
                         </div>
                     </div>
@@ -47,11 +47,23 @@
                 </div>
             </div>
             <!-- cabin -->
-            <div class="col-sm-9">
-                <!-- DateTime -->
+            <!-- subclass -->
+            <div class="col-sm-6">
                 <div class="chart-wrapper">
                     <div class="chart-title">
-                        Date Time
+                        Subclass
+                    </div>
+                    <div class="chart-stage">
+                        <div id="Subclass-chart"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- subclass -->
+            <div class="col-sm-12">
+                <!-- DateTime -->
+                <div class="chart-wrapper" id="DateTime-chart-container">
+                    <div class="chart-title">
+                        Date
                     </div>
                     <div class="chart-stage">
                         <div id="DateTime-chart"></div>
@@ -61,7 +73,7 @@
             </div>
         </div>
         </div>
-        <div class="col-sm-12">
+        <div class="col-sm-3">
             <div class="row">
                 <!-- PoS list -->
                 <div class="col-sm-12">
@@ -85,14 +97,28 @@
 
 
 <script>
+    var dataTable = dc.dataTable("#dc-table-graph");
+    var CabinChart = dc.pieChart("#Cabin-chart");
+    var PoSChart = dc.rowChart("#PoS-chart");
+    var HistoChart = dc.barChart("#Histo-chart");
+    var timeChart = dc.barChart("#DateTime-chart");
+    var SubclassChart = dc.pieChart("#Subclass-chart");
 
     var dataCSV;
+    function updateDimensions(winWidth) {
+        margin.top = 20;
+        margin.right = 50;
+        margin.left = 50;
+        margin.bottom = 50;
+
+        width = winWidth - margin.left - margin.right;
+        height = 500 - margin.top - margin.bottom;
+    }
     // load data from a csv file
     d3.tsv("../../../../data/deloreanData.tsv", function(data){
         dataCSV=data;
-
         var dateFormat = d3.time.format("%Y-%m-%d");
-
+        var width, height
         // clean data
 
         data.forEach(function(d) {
@@ -112,6 +138,13 @@
 
         var indexedData = crossfilter(data);
 
+        function getTops(source_group) {
+            return {
+                all: function () {
+                    return source_group.top(20);
+                }
+            };
+        }
         // Create dimensions
 
         var PaxDim = indexedData.dimension(function (d) {return d.PaxY;});
@@ -137,6 +170,8 @@
         var PosGroup = PosDim.group();
         var OrigGroup = OrigDim.group();
         var DestGroup = DestDim.group();
+        var PosTopGroup = getTops(PosGroup);
+        var all = indexedData.groupAll();
 
 
 
@@ -152,45 +187,49 @@
 
         // Create the dc.js chart objects & link to div
 
-        var dataTable = dc.dataTable("#dc-table-graph");
-        var CabinChart = dc.pieChart("#Cabin-chart");
-        var PoSChart = dc.rowChart("#PoS-chart");
-        var HistoChart = dc.barChart("#Histo-chart");
-        var timeChart = dc.barChart("#DateTime-chart");
+
         // Setup the charts
 
-
-
-
-      HistoChart
+        HistoChart.width($('#Histo-chart-container')[0].clientWidth)
+            .margins({top: 10, right: 50, bottom: 20, left: 40})
             .dimension(PaxDim)
             .group(FlightGroup)
-        .x(d3.scale.ordinal().domain(FlightDim))
+          .gap(50)
+          .renderVerticalGridLines(true)
+          .renderHorizontalGridLines(true)
+          .x(d3.scale.ordinal().domain(FlightDim))
+            .brushOn(false)
           .xUnits(dc.units.ordinal)
-        .brushOn(false);
+
         console.log(d3.scale.ordinal().rangeRoundBands([0, 20], .05));
 
-        timeChart.width(650)
+        timeChart.width($('#DateTime-chart-container')[0].clientWidth)
             .height(140)
             .dimension(FlightDateDim)
             .group(FlightDateGroup)
+            .barPadding(0)
             .x(d3.time.scale().domain([minDate, maxDate]))
+            .xUnits(d3.time.day)
             .yAxisLabel("Frequency").xAxisLabel('Time');
 
         //PoS
-        PoSChart.height(1510)
-            .dimension(PosDim.top(30))
-            .group(PosGroup)
+        PoSChart.height(510)
+            .dimension(PosDim)
+            .group(PosTopGroup)
             .ordering(function(d) { return -d.value })
-            .colors(['blue'])
+
 
         //cabin
-        var xAxis = PoSChart.elasticX(true);
+        var xAxis = PoSChart.elasticX(true).xAxis().ticks(5);
 
         CabinChart
             .dimension(CabinDim)
-            .group(CabinGroup)
+            .group(CabinGroup);
 
+        //subclass
+        SubclassChart
+            .dimension(SubclassDim)
+            .group(SubclassGroup);
         // Table
         dataTable
             .dimension(PaxDim)

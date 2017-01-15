@@ -6,7 +6,21 @@ body {
 a {
     color: #00B7FF;
 }
-
+svg{
+    max-width: 100% ;
+    max-height: 100%;
+    position: relative;
+}
+rect{
+    max-width: 100% ;
+    max-height: 100%;
+    position: relative;
+}
+g{
+    max-width: 100% ;
+    max-height: 100% ;
+    position: relative ;
+}
 #sidebar-wrapper {
     background-color: rgb(91, 82, 174);
     color: white;
@@ -141,4 +155,8 @@ body.application hr {
 
     padding: 8px 10px 5px;
 
+}
+#Histo-chart .x.axis text {
+    text-anchor: end !important;
+    transform: rotate(90deg);
 }
