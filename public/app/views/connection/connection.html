@@ -1,18 +1,18 @@
 <div class="container">
     <div class="container">
 
-        <form name="connectionForm" class="form-signin" novalidate>
+        <form name="connectionForm" class="form-signin" ng-submit="login(email, password)">
             <h2 class="form-signin-heading">Please sign in</h2>
             <label for="login" class="sr-only">Email address</label>
-            <input type="email" id="login" class="form-control" name="email" placeholder="Email address" required autofocus ng-model="connection.email" ng-required="true">
+            <input type="email" id="login" class="form-control" name="email" placeholder="Email address" required autofocus ng-model="email" ng-required="true">
             <label for="password" class="sr-only">Password</label>
-            <input type="password" id="password" class="form-control" name="password" placeholder="Password" required ng-model="connection.password" ng-required="true">
+            <input type="password" id="password" class="form-control" name="password" placeholder="Password" required ng-model="password" ng-required="true">
             <div class="checkbox">
                 <label>
                     <input type="checkbox" value="remember-me"> Remember me
                 </label>
             </div>
-            <button class="btn btn-lg btn-primary btn-block" ng-click="login()" type="submit">Sign in</button>
+            <button class="btn btn-lg btn-primary btn-block" ng-click="login(email, password)" type="submit">Sign in</button>
         </form>
 
     </div> <!-- /container -->

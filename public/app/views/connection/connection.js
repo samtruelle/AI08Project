@@ -15,18 +15,21 @@ angular.module('deloreanweb.connection', [])
 
 })
 
-.controller("connectionCtrl", ['$scope','$rootScope','$window', '$state', function($scope, $rootScope, $window, $state){
+.controller("connectionCtrl", ['loginService', 'authenticationService', '$scope','$rootScope','$window', '$state', function(loginService, authenticationService, $scope, $rootScope, $window, $state){
 
     $scope.newAccount = {};
     $scope.connection = {};
 
-    $scope.createAccount = function(){
-        console.log($scope.newAccount);
-        console.log($scope.connection);
-    };
-
-    $scope.login = function() {
-        $state.go('app.home');
+    $scope.login = function(email, password) {
+        loginService.login(email, password).then( function($data) {
+            if ($data) {
+                var user = JSON.parse(JSON.stringify($data.data));
+                //$scope.user = JSON.parse($data).mail;
+                authenticationService.createSession(user.mail, {});
+                $scope.user = user.mail;
+                $state.go('app.home');
+            }
+        })
     };
 
 }]);
