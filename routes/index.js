@@ -3,7 +3,9 @@ var multer = require('multer');
 var papa = require('papaparse');
 var mongoose = require('mongoose');
 var file = require('../models/File.js');
+var user = require('../models/User.js');
 var fs = require('fs');
+var jwt = require('jsonwebtoken');
 var MongoClient = require('mongodb').MongoClient;
 
 var router = express.Router();
@@ -15,7 +17,7 @@ router.get('/', function (req, res, next) {
 });
 
 
-router.get('/home/flightDate/Before/:date', function (req, res, next) {
+router.get('/api/flightDate/Before/:date', function (req, res, next) {
     var newDate = req.params.date.split('-');
     file.find({
         validUntil: {
@@ -26,9 +28,57 @@ router.get('/home/flightDate/Before/:date', function (req, res, next) {
             console.log("error")
             res.status(400).json(err)
         } else
-            res.status(200).send();
-            res.data = data;
-            console.log(data);
+            res.json(JSON.stringify(data))
+    })
+});
+
+
+router.post('/api/file', function (req, res, next) {
+    file.find({}, function(err, data) {
+        console.log('passing BY')
+        if (err) {
+            console.log("error")
+            res.status(400).json(err)
+        } else
+            res.json(JSON.stringify(data))
+        //res.data = data;
+        //console.log(data);
+    })
+});
+
+router.post('/api/login', function (req, res) {
+    var mail = req.body.mail || '',
+        password = req.body.password || '';
+
+    if (mail == '' || password == '') {
+        return res.status(401).send("Missing parameters");
+    }
+    user.findOne({
+        mail: mail
+    }, function (err, result) {
+        if (err) {
+            return res.sendStatus(401);
+        } else {
+            result = JSON.parse(JSON.stringify(result));
+            if (result) {
+
+                if (result.password.localeCompare(password) == 0) {
+                    //var token = jwt.sign(user, "vnqfdmvqfnvqmernvmeqnvmqrehqùebnqZ43565TGV2R24GVFVDdsvQ%vmdsfbqf", {
+                    //    expiresIn:  3600//seconds, 600 minutes, 10heures.
+                    //});
+                    result.password = "";
+                    return res.json({
+                        //token: token,
+                        user: JSON.stringify(result)
+                    });
+                } else
+
+                return res.sendStatus(401);
+            } else {
+                console.log("no users found");
+                res.sendStatus(401);
+            }
+        }
     })
 });
 
@@ -45,6 +95,15 @@ router.post('/home/import', upload.single('file'), function (req, res, next) {
             newline: "",	// auto-detect
             header: true,
             complete: function (result) {
+
+                //emptying collection
+                file.remove({}, function (err, docs) {
+                    if (err) {
+                        console.log("error")
+                        res.status(400).json(err)
+                    } else
+                        res.status(200).send();
+                });
 
                 var elements = result.data;
 

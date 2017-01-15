@@ -1,158 +1,144 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
 }
+
 #sidebar-wrapper {
-  top: 0px;
-  height: 100%;
+    background-color: rgb(91, 82, 174);
+    color: white;
 }
 
 .closeSideBarLink {
-  position: relative;
-  top: 5px;
-  left: 100px;
-  width: 40px;
-  color: white;
-  background-color: transparent;
-  border: none;
+    position: relative;
+    top: 5px;
+    left: 100px;
+    width: 40px;
+    color: white;
+    background-color: transparent;
+    border: none;
 }
 
 #hoverBar {
-  position: absolute;
-  left: 0px;
-  height: 100%;
-  width: 30px;
-  opacity: 0;
+    position: absolute;
+    left: 0px;
+    height: 100%;
+    width: 30px;
+    opacity: 0;
 }
 
-.sidebar-nav li a{
-  display: inline !important;
+.sidebar-nav li a {
+    display: inline !important;
 }
 
 body.application {
 
-  background: #f2f2f2;
+    background: #f2f2f2;
 
-  padding: 60px 20px 0;
+    padding: 60px 20px 0;
 
 }
 
 body.application > .container-fluid {
 
-  padding-left: 0px;
+    padding-left: 0px;
 
-  padding-right: 0px;
+    padding-right: 0px;
 
 }
 
 body.application div[class^="col-"] {
 
-  padding-left: 5px;
+    padding-left: 5px;
 
-  padding-right: 5px;
+    padding-right: 5px;
 
 }
 
 body.application div[class^="col-"] div[class^="col-"] {
 
-  padding-left: 15px;
+    padding-left: 15px;
 
-  padding-right: 15px;
+    padding-right: 15px;
 
 }
-
-
 
 body.application hr {
 
-  border-color: #d7d7d7;
+    border-color: #d7d7d7;
 
-  margin: 10px 0;
+    margin: 10px 0;
 
 }
 
-
-
-
-
-
-
 .navbar-inverse {
 
-  background-color: #3d4a57;
+    background-color: #3d4a57;
 
-  border-color: #333;
+    border-color: #333;
 
 }
 
 .navbar-inverse .navbar-nav > li > a,
-
 .navbar a.navbar-brand {
 
-  color: #fbfbfb;
+    color: #fbfbfb;
 
-  text-decoration: none;
+    text-decoration: none;
 
 }
 
-
-
 .chart-wrapper {
 
-  background: #fff;
+    background: #fff;
 
-  border: 1px solid #e2e2e2;
+    border: 1px solid #e2e2e2;
 
-  border-radius: 3px;
+    border-radius: 3px;
 
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 
 }
 
 .chart-wrapper .chart-title {
 
-  border-bottom: 1px solid #d7d7d7;
+    border-bottom: 1px solid #d7d7d7;
 
-  color: #666;
+    color: #666;
 
-  font-size: 14px;
+    font-size: 14px;
 
-  font-weight: 200;
+    font-weight: 200;
 
-  padding: 7px 10px 4px;
+    padding: 7px 10px 4px;
 
 }
-
-
 
 .chart-wrapper .chart-stage {
 
-  /*min-height: 240px;*/
+    /*min-height: 240px;*/
 
-  overflow: hidden;
+    overflow: hidden;
 
-  padding: 5px 10px;
+    padding: 5px 10px;
 
-  position: relative;
+    position: relative;
 
 }
 
-
-
 .chart-wrapper .chart-notes {
 
-  background: #fbfbfb;
+    background: #fbfbfb;
 
-  border-top: 1px solid #e2e2e2;
+    border-top: 1px solid #e2e2e2;
 
-  color: #808080;
+    color: #808080;
 
-  font-size: 12px;
+    font-size: 12px;
 
-  padding: 8px 10px 5px;
+    padding: 8px 10px 5px;
 
 }
