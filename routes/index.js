@@ -84,7 +84,6 @@ router.post('/api/login', function (req, res) {
 
 router.post('/home/import', upload.single('file'), function (req, res, next) {
     //Ouvre (FSread js)
-
     fs.readFile('uploads/' + req.file.filename, 'utf8', function (err, data) {
         if (err) {
             return console.log(err);
@@ -106,6 +105,7 @@ router.post('/home/import', upload.single('file'), function (req, res, next) {
                 });
 
                 var elements = result.data;
+                console.log(elements.length)
 
                 for (var i = 0; i < elements.length; i++) {
                     //var newFlightDate = elements[i].flight_date.split('-');

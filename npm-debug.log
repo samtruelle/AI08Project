@@ -1,0 +1,94 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'cache',
+1 verbose cli   'clean' ]
+2 info using npm@3.8.9
+3 info using node@v6.2.0
+4 silly ls normalized .
+5 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\_locks is being purged
+6 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\_locks
+7 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\base64url is being purged
+8 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\base64url
+9 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\buffer-equal-constant-time is being purged
+10 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\buffer-equal-constant-time
+11 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\ecdsa-sig-formatter is being purged
+12 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\ecdsa-sig-formatter
+13 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\hoek is being purged
+14 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\hoek
+15 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\isemail is being purged
+16 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\isemail
+17 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\joi is being purged
+18 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\joi
+19 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\jsonwebtoken is being purged
+20 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\jsonwebtoken
+21 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\jwa is being purged
+22 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\jwa
+23 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\jws is being purged
+24 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\jws
+25 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\lodash.once is being purged
+26 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\lodash.once
+27 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\moment is being purged
+28 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\moment
+29 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\registry.npmjs.org is being purged
+30 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\registry.npmjs.org
+31 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\safe-buffer is being purged
+32 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\safe-buffer
+33 silly gentlyRm C:\Users\i313195\AppData\Roaming\npm-cache\topo is being purged
+34 verbose gentlyRm don't care about contents; nuking C:\Users\i313195\AppData\Roaming\npm-cache\topo
+35 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\base64url
+36 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\_locks
+37 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\buffer-equal-constant-time
+38 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\ecdsa-sig-formatter
+39 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\hoek
+40 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\isemail
+41 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\joi
+42 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\jsonwebtoken
+43 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\jwa
+44 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\jws
+45 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\lodash.once
+46 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\moment
+47 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\registry.npmjs.org
+48 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\safe-buffer
+49 silly vacuum-fs purging C:\Users\i313195\AppData\Roaming\npm-cache\topo
+50 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming\npm-cache
+51 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming\npm-cache
+52 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming\npm-cache
+53 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming\npm-cache
+54 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming\npm-cache
+55 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming\npm-cache
+56 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming\npm-cache
+57 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming\npm-cache
+58 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming\npm-cache
+59 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming\npm-cache
+60 silly vacuum-fs removing C:\Users\i313195\AppData\Roaming\npm-cache
+61 silly vacuum-fs removing C:\Users\i313195\AppData\Roaming\npm-cache
+62 silly vacuum-fs removing C:\Users\i313195\AppData\Roaming\npm-cache
+63 silly vacuum-fs removing C:\Users\i313195\AppData\Roaming\npm-cache
+64 silly vacuum-fs removing C:\Users\i313195\AppData\Roaming\npm-cache
+65 silly vacuum-fs unable to remove C:\Users\i313195\AppData\Roaming\npm-cache due to EPERM: operation not permitted, rmdir 'C:\Users\i313195\AppData\Roaming\npm-cache'
+66 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming
+67 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming
+68 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming
+69 silly vacuum-fs quitting because other entries in C:\Users\i313195\AppData\Roaming
+70 verbose stack Error: EPERM: operation not permitted, rmdir 'C:\Users\i313195\AppData\Roaming\npm-cache'
+70 verbose stack     at Error (native)
+71 verbose cwd C:\Users\i313195\dataViz\DataVizualisation
+72 error Windows_NT 10.0.10586
+73 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "cache" "clean"
+74 error node v6.2.0
+75 error npm  v3.8.9
+76 error path C:\Users\i313195\AppData\Roaming\npm-cache
+77 error code EPERM
+78 error errno -4048
+79 error syscall rmdir
+80 error Error: EPERM: operation not permitted, rmdir 'C:\Users\i313195\AppData\Roaming\npm-cache'
+80 error     at Error (native)
+80 error  { Error: EPERM: operation not permitted, rmdir 'C:\Users\i313195\AppData\Roaming\npm-cache'
+80 error     at Error (native)
+80 error   errno: -4048,
+80 error   code: 'EPERM',
+80 error   syscall: 'rmdir',
+80 error   path: 'C:\\Users\\i313195\\AppData\\Roaming\\npm-cache' }
+81 error Please try running this command again as root/Administrator.
+82 verbose exit [ -4048, true ]

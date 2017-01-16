@@ -23,12 +23,17 @@ angular.module('deloreanweb.home', [])
 
         $scope.getAllData = function () {
             generalService.getAllData().then(function($dataObject){
-                $scope.data = JSON.parse($dataObject.data);
-                myDropzone.removeAllFiles();
-                $('#vizBody').show()
-                $('#table').show()
-                renderViz($scope.data);
+                if(JSON.parse($dataObject.data).length) {
+                    $("#noDataWarning").hide();
+                    $scope.data = JSON.parse($dataObject.data);
+                    myDropzone.removeAllFiles();
+                    $('#vizBody').show()
+                    $('#table').show()
+                    console.log($scope.data)
+                    renderViz($scope.data);
+                }
             }, function(){
+                $("#noDataWarning").show();
                 console.log("no products");
             });
         };

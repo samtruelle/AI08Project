@@ -48,6 +48,11 @@ g{
     display: inline !important;
 }
 
+.sideBarVisibilityToggle {
+    position: relative;
+    left: 20px;
+}
+
 body.application {
 
     background: #f2f2f2;

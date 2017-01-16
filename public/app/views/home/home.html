@@ -39,19 +39,21 @@
                     <span class="glyphicon glyphicon-menu-left"/>
                 </a>
             </li>
-            <li class="sidebar-brand">
+            <li> <h3>Toggle visibility </h3></li>
+            <hr/>
+            <li class="sidebar-brand sideBarVisibilityToggle">
                 <a href="#" ng-click="hideViz('#histoDiv')">Histogramme</a>
             </li>
-            <li class="sidebar-brand">
+            <li class="sidebar-brand sideBarVisibilityToggle">
                 <a href="#" ng-click="hideViz('#cabinDiv')">Cabin</a>
             </li>
-            <li class="sidebar-brand">
+            <li class="sidebar-brand sideBarVisibilityToggle">
                 <a href="#" ng-click="hideViz('#DateTime-chart-container')">Flight date</a>
             </li>
-            <li class="sidebar-brand">
+            <li class="sidebar-brand sideBarVisibilityToggle">
                 <a href="#" ng-click="hideViz('#posDiv')">PoS</a>
             </li>
-            <li class="sidebar-brand">
+            <li class="sidebar-brand sideBarVisibilityToggle">
                 <a href="#" ng-click="hideViz('#dc-table-graph')">Table</a>
             </li>
         </ul>
@@ -62,6 +64,9 @@
     <!-- Page Content -->
     <div id="page-content-wrapper">
         <div class="container-fluid">
+            <div id="noDataWarning" align-content="center" class="alert alert-warning" visibility="hidden">
+                <strong>Warning!</strong> No data!
+            </div>
             <div id="vizBody">
                 <div class="col-sm-9">
                     <div class="row">
