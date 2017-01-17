@@ -68,22 +68,22 @@
                 <strong>Warning!</strong> No data!
             </div>
             <div id="vizBody">
-                <div class="col-sm-9">
+                <div class="col-md-9">
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-md-12">
                             <div class="chart-wrapper">
                                 <div class="chart-title">
                                     boking curve
                                 </div>
-                                <div class="chart-stage">
-                                    <div id="Curve-chart"></div>
+                                <div class="chart-stage" id="Curve-chart-container">
+                                    <div id="Curve-chart" ></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <!-- booking histogram -->
-                        <div class="col-sm-12">
+                        <div class="col-md-12">
                             <div id='histoDiv' class="chart-wrapper">
                                 <div class="chart-title">
                                     booking histogram
@@ -95,36 +95,36 @@
                         </div>
                         <!-- booking histogram -->
                         <!-- cabin -->
-                        <div class="col-sm-6">
+                        <div class="col-md-6">
                             <div id="cabinDiv" class="chart-wrapper">
                                 <div class="chart-title">
                                     Cabin
                                 </div>
-                                <div class="chart-stage">
+                                <div class="chart-stage" id="Cabin-chart-container">
                                     <div id="Cabin-chart"></div>
                                 </div>
                             </div>
                         </div>
                         <!-- cabin -->
                         <!-- subclass -->
-                        <div class="col-sm-6">
+                        <div class="col-md-6">
                             <div class="chart-wrapper">
                                 <div class="chart-title">
                                     Subclass
                                 </div>
-                                <div class="chart-stage">
+                                <div class="chart-stage" id="Subclass-chart-container">
                                     <div id="Subclass-chart"></div>
                                 </div>
                             </div>
                         </div>
                         <!-- subclass -->
-                        <div class="col-sm-12">
+                        <div class="col-md-12">
                             <!-- DateTime -->
-                            <div class="chart-wrapper" id="DateTime-chart-container">
+                            <div class="chart-wrapper" >
                                 <div class="chart-title">
                                     Date
                                 </div>
-                                <div class="chart-stage">
+                                <div class="chart-stage" id="DateTime-chart-container">
                                     <div id="DateTime-chart"></div>
                                 </div>
                             </div>
@@ -132,15 +132,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-md-3">
                     <div class="row">
                         <!-- PoS list -->
-                        <div class="col-sm-12">
+                        <div class="col-md-12">
                             <div id="posDiv" class="chart-wrapper">
                                 <div class="chart-title">
                                     PoS
                                 </div>
-                                <div class="chart-stage">
+                                <div class="chart-stage" id="PoS-chart-container">
                                     <div id="PoS-chart"></div>
                                 </div>
                             </div>
@@ -151,8 +151,10 @@
             </div>
         </div>
 
-        <table class='table table-responsive' id='dc-table-graph'>
+        <table class='table' id='dc-table-graph'>
         </table>
+        <input id="last" class="btn" type="Button" value="Last" onclick="javascript:last()" />
+        <input id="next" class="btn" type="button" value="Next" onclick="javascript:next()"/>
 
     </div>
     <script>
@@ -162,6 +164,13 @@
             $('#vizBody').hide()
             $('#table').hide()
         }
+        var dataTable;
+        var CabinChart;
+        var PoSChart;
+        var HistoChart;
+        var timeChart ;
+        var SubclassChart;
+        var ofs = 0, pag = 10;
         // load data from a csv file
         function renderViz(scopeData) {
             console.log("renderViz")
@@ -224,6 +233,18 @@
             var allDim = indexedData.dimension(function (d) {
                 return d;
             });
+
+            //function used to create a fake group
+            function getTops(sourcegroup) {
+                return {
+                    all: function () {
+                        return sourcegroup.top(20);
+                    }
+                };
+            }
+
+
+
             // define some group
 
             var PaxGroup = PaxDim.group();
@@ -236,7 +257,7 @@
             var PosGroup = PosDim.group();
             var OrigGroup = OrigDim.group();
             var DestGroup = DestDim.group();
-
+            var PosTopGroup = getTops(PosGroup);
 
             var minDate = dateFormat.parse(FlightDateDim.bottom(1)[0]['flight_date']);
             var maxDate = dateFormat.parse(FlightDateDim.top(1)[0]['flight_date']);
@@ -248,44 +269,58 @@
 
             // Create the dc.js chart objects & link to div
 
-            var dataTable = dc.dataTable("#dc-table-graph");
-            var CabinChart = dc.pieChart("#Cabin-chart");
-            var PoSChart = dc.rowChart("#PoS-chart");
-            var HistoChart = dc.barChart("#Histo-chart");
-            var timeChart = dc.barChart("#DateTime-chart");
+            dataTable = dc.dataTable("#dc-table-graph");
+            CabinChart = dc.pieChart("#Cabin-chart");
+            PoSChart = dc.rowChart("#PoS-chart");
+            HistoChart = dc.barChart("#Histo-chart");
+            timeChart = dc.barChart("#DateTime-chart");
+            SubclassChart = dc.pieChart("#Subclass-chart");
+
             // Setup the charts
 
 
             HistoChart
+                    .width($('#Histo-chart-container')[0].clientWidth)
+                    .margins({top: 10, right: 50, bottom: 40, left: 30})
                     .dimension(PaxDim)
                     .group(FlightGroup)
+                    .renderVerticalGridLines(true)
+                    .renderHorizontalGridLines(true)
                     .x(d3.scale.ordinal().domain(FlightDim))
-                    .xUnits(dc.units.ordinal)
+                    .xUnits(dc.units.ordinal).yAxisLabel("").xAxisLabel('')
                     .brushOn(false);
-            console.log(d3.scale.ordinal().rangeRoundBands([0, 20], .05));
 
-            timeChart.width(650)
+            timeChart.width($('#DateTime-chart-container')[0].clientWidth)
                     .height(140)
                     .dimension(FlightDateDim)
                     .group(FlightDateGroup)
                     .x(d3.time.scale().domain([minDate, maxDate]))
                     .yAxisLabel("Frequency").xAxisLabel('Time');
 
+            var xAxis = timeChart.xAxis().tickFormat(d3.time.format('%e'));
+
             //PoS
-            PoSChart.height(1510)
-                    .dimension(PosDim.top(30))
-                    .group(PosGroup)
+            PoSChart.height(510)
+                    .dimension(PosDim)
+                    .group(PosTopGroup)
                     .ordering(function (d) {
                         return -d.value
-                    })
-                    .colors(['blue'])
+                    });
+            xAxis = PoSChart.elasticX(true).xAxis().ticks(5);
 
             //cabin
-            var xAxis = PoSChart.elasticX(true);
 
             CabinChart
+                    .width($('#Cabin-chart-container')[0].clientWidth - 20)
+                    .height($('#Cabin-chart-container')[0].clientWidth - 20 )
                     .dimension(CabinDim)
                     .group(CabinGroup)
+
+            //subclass
+            SubclassChart.width($('#Subclass-chart-container')[0].clientWidth -20)
+                .height($('#Subclass-chart-container')[0].clientWidth - 20 )
+                .dimension(SubclassDim)
+                .group(SubclassGroup);
 
             // Table
             dataTable
@@ -293,42 +328,42 @@
                     .group(function (d) {
                         return ""
                     })
-                    .size(60)
+                    .size(Infinity)
                     .columns([
                         {
                             label: "Snapshot date",
                             format: function (d) {
-                                return d.Snapshot;
+                                return d3.time.format('%d-%m-%y')(d.Snapshot);
                             }
                         },
                         {
                             label: "Snapshot date",
                             format: function (d) {
-                                return d.Carrier;
+                                return d.carrier;
                             }
                         },
                         {
                             label: "Snapshot date",
                             format: function (d) {
-                                return d.Flight;
+                                return d.flight;
                             }
                         },
                         {
                             label: "Snapshot date",
                             format: function (d) {
-                                return d.FlightDate;
+                                return d3.time.format('%d-%m-%y')(d.FlightDate);
                             }
                         },
                         {
                             label: "Snapshot date",
                             format: function (d) {
-                                return d.Cabin;
+                                return d.cabin;
                             }
                         },
                         {
                             label: "Snapshot date",
                             format: function (d) {
-                                return d.Subclass;
+                                return d.subclass;
                             }
                         },
                         {
@@ -351,14 +386,39 @@
                         }
                     ])
                     .sortBy(function (d) {
-                        return d.Cabin;
+                        return d.PosCode;
                     })
                     .order(d3.ascending);
-
+            update()
             // Render the Charts
             dc.renderAll();
-        }
 
+        }
+        window.addEventListener("resize",updateChart) ;
+        function updateChart(){
+
+            HistoChart.width($('#Histo-chart-container')[0].clientWidth);
+            CabinChart.width($('#Cabin-chart-container')[0].clientWidth -20)
+                    .height($('#Cabin-chart-container')[0].clientWidth - 20 );
+            timeChart.width($('#DateTime-chart-container')[0].clientWidth);
+            SubclassChart.width($('#Subclass-chart-container')[0].clientWidth -20)
+                    .height($('#Subclass-chart-container')[0].clientWidth - 20 );
+            dc.renderAll();
+        }
+        function update() {
+            dataTable.beginSlice(ofs);
+            dataTable.endSlice(ofs+pag);
+        }
+        function next() {
+            ofs += pag;
+            update();
+            dataTable.redraw();
+        }
+        function last() {
+            ofs -= pag;
+            update();
+            dataTable.redraw();
+        }
     </script>
 </div>
 </div>
