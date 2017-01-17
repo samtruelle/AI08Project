@@ -69,18 +69,18 @@
             </div>
             <div id="vizBody">
                 <div class="col-md-9">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="chart-wrapper">
-                                <div class="chart-title">
-                                    boking curve
-                                </div>
-                                <div class="chart-stage" id="Curve-chart-container">
-                                    <div id="Curve-chart" ></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!--<div class="row">-->
+                        <!--<div class="col-md-12">-->
+                            <!--<div class="chart-wrapper">-->
+                                <!--<div class="chart-title">-->
+                                    <!--boking curve-->
+                                <!--</div>-->
+                                <!--<div class="chart-stage" id="Curve-chart-container">-->
+                                    <!--<div id="Curve-chart" ></div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <div class="row">
                         <!-- booking histogram -->
                         <div class="col-md-12">
@@ -163,6 +163,8 @@
             $('#importModal').modal('show');
             $('#vizBody').hide()
             $('#table').hide()
+            $('#last').hide()
+            $('#next').hide()
         }
         var dataTable;
         var CabinChart;

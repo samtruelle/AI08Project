@@ -29,6 +29,8 @@ angular.module('deloreanweb.home', [])
                     myDropzone.removeAllFiles();
                     $('#vizBody').show()
                     $('#table').show()
+                    $('#last').show()
+                    $('#next').show()
                     console.log($scope.data)
                     renderViz($scope.data);
                 }

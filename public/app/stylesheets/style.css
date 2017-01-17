@@ -39,6 +39,16 @@ a {
     left: 20px;
 }
 
+@media all and (max-width: 768px) {
+    #hoverBar {
+        display: none;
+    }
+
+    #sidebar-wrapper {
+        display: none
+    }
+}
+
 body.application {
 
     background: #f2f2f2;
