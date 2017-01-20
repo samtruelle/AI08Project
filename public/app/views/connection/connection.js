@@ -1,7 +1,3 @@
-/**
- * Created by sbunlon on 15/12/2016.
- */
-
 angular.module('deloreanweb.connection', [])
 
 .config(function($stateProvider){
@@ -24,7 +20,7 @@ angular.module('deloreanweb.connection', [])
         loginService.login(email, password).then( function($data) {
             if ($data) {
                 var user = JSON.parse(JSON.stringify($data.data));
-                //$scope.user = JSON.parse($data).mail;
+                $scope.user = JSON.parse($data).mail;
                 authenticationService.createSession(user.mail, {});
                 $scope.user = user.mail;
                 $state.go('app.home');
